@@ -1,0 +1,63 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  Deploys an IAM user and a Billing Alarm.
+
+Parameters:
+
+  AlarmThreshold:
+    Type: String
+    Description: Alarm if AWS spend is over this threshold in dollars.
+    Default: 10
+
+  Email:
+    Type: String
+    Description: The email to which a billing notification will be sent.
+
+  UserName:
+    Type: String
+    Description: The name of the IAM user to create.
+  Password:
+    Type: String
+    NoEcho: True
+    Description: The password for your IAM user. You can change it later.
+
+Resources:
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      LoginProfile:
+        Password: !Ref Password
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      UserName: !Ref UserName
+  SpendNotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref Email
+
+  SpendAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription:
+        'Fn::Join':
+          - ''
+          - - Alarm if AWS spending is over $
+            - !Ref AlarmThreshold
+      Namespace: AWS/Billing
+      MetricName: EstimatedCharges
+      Dimensions:
+      - Name: Currency
+        Value: USD
+      Statistic: Maximum
+      Period: '21600'
+      EvaluationPeriods: '1'
+      Threshold: !Ref AlarmThreshold
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref SpendNotificationTopic
+      InsufficientDataActions:
+        - !Ref SpendNotificationTopic
