@@ -18,12 +18,14 @@ Parameters:
   UserName:
     Type: String
     Description: The name of the IAM user to create.
+
   Password:
     Type: String
     NoEcho: True
     Description: The password for your IAM user. You can change it later.
 
 Resources:
+
   IAMUser:
     Type: AWS::IAM::User
     Properties:
@@ -32,6 +34,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
       UserName: !Ref UserName
+      
   SpendNotificationTopic:
     Type: AWS::SNS::Topic
     Properties:
