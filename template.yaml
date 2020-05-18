@@ -6,7 +6,7 @@ Description: >
 
 Parameters:
 
-  AlarmThreshold:
+  BudgetThreshold:
     Type: String
     Description: Alarm if AWS spend is over this threshold in dollars.
     Default: 10
@@ -34,33 +34,28 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
       UserName: !Ref UserName
-      
-  SpendNotificationTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        - Protocol: email
-          Endpoint: !Ref Email
 
-  SpendAlarm:
-    Type: AWS::CloudWatch::Alarm
+  Budget:
+    Type: AWS::Budgets::Budget
     Properties:
-      AlarmDescription:
-        'Fn::Join':
-          - ''
-          - - Alarm if AWS spending is over $
-            - !Ref AlarmThreshold
-      Namespace: AWS/Billing
-      MetricName: EstimatedCharges
-      Dimensions:
-      - Name: Currency
-        Value: USD
-      Statistic: Maximum
-      Period: '21600'
-      EvaluationPeriods: '1'
-      Threshold: !Ref AlarmThreshold
-      ComparisonOperator: GreaterThanThreshold
-      AlarmActions:
-        - !Ref SpendNotificationTopic
-      InsufficientDataActions:
-        - !Ref SpendNotificationTopic
+      Budget:
+        BudgetLimit:
+          Amount: !Ref BudgetThreshold
+          Unit: USD
+        TimeUnit: MONTHLY
+        BudgetType: COST
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 99
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref Email
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+          Subscribers:
+          - SubscriptionType: EMAIL
+            Address: !Ref Email
