@@ -29,6 +29,7 @@ It is an AWS best practice to use IAM User accounts instead of root credentials.
 ```
 
 When deploying the stack, you'll want to set these parameters to fit your use case:
+
 	1. _BudgetThreshold_ This is a monthly budget, in USD. You'll recieve email notifications when you exceed 80% or 100% of the budget. The threshold is adjustable, so if you set it to $3 and later find $10 is more useful, you can update the Stack with a new value to update it.
 	2. _Email_ This email will recieve billing notifications based on your budget.
 	3. _UserName_ You'll use this value to log in to the console with your IAM User this stack creates.
