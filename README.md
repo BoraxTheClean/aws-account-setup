@@ -9,6 +9,7 @@ It is an AWS best practice to use IAM User accounts instead of root credentials.
 ## Parameters
 
 ```yaml
+
   BudgetThreshold:
     Type: String
     Description: Alarm if AWS spend is over this threshold in dollars.
@@ -26,6 +27,7 @@ It is an AWS best practice to use IAM User accounts instead of root credentials.
     Type: String
     NoEcho: True
     Description: The password for your IAM user. You can change it later.
+
 ```
 
 When deploying the stack, you'll want to set these parameters to fit your use case:
