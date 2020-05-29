@@ -8,7 +8,7 @@ It is an AWS best practice to use IAM User accounts instead of root credentials.
 
 ## Parameters
 
-```
+```yaml
   BudgetThreshold:
     Type: String
     Description: Alarm if AWS spend is over this threshold in dollars.
@@ -35,4 +35,11 @@ When deploying the stack, you'll want to set these parameters to fit your use ca
 	3. _UserName_ You'll use this value to log in to the console with your IAM User this stack creates.
 	4. _Password_ You'll use this password to log in. This password won't be visible in the console after you enter it.
 
+## Where to Find Me
+
 [If you liked this free resource, be free to check out my other courses at GumRoad!](https://store.owen.dev)
+
+[All my links are on my personal site.](https://owen.dev)
+
+Email me at owen@owen.dev, follow me on GitHub, and [Twitter](https://twitter.com/AWSOwen)
+
